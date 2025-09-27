@@ -3,7 +3,7 @@
 
 for instance in @ 
 do 
-    Instance_ID=(aws ec2 run-instances \
+    Instance_ID=$(aws ec2 run-instances \
       --image-id ami-09c813fb71547fc4f \
       --instance-type t2.micro \
       --security-group-ids sg-07e88823124a6dddf \
