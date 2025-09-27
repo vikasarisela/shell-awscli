@@ -12,7 +12,7 @@ do
   --output text
 )
 
-if [ $instance -ne "frontend" ];then
+if [ $instance != "frontend" ];then
 IP=$(aws ec2 describe-instances \
   --instance-ids i-0d732f11181977337 \
   --query 'Reservations[0].Instances[0].[PrivateIpAddress]' \
