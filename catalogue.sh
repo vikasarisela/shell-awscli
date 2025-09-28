@@ -55,7 +55,7 @@ systemctl enable catalogue
 VALIDATE $? "Enabling Catlogue Service"
 systemctl start catalogue
 VALIDATE $? "Start Catalogue Service"
-cp mongo.repo /etc/yum.repos.d/mongo.repo
+cp PWD/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Copying Mongodb to mongo repo"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing Mongodb "
