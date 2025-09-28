@@ -33,37 +33,62 @@ dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "Enabling  Module"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Installing Node JS"
+
+id roboshop 
+if [$? -ne 0]; then
 useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
 VALIDATE $? "Adding Application User"
-mkdir /app 
+else
+echo -e "User already exist ... skipping.."
+fi
+
+mkdir -p /app 
 VALIDATE $? "Making directory app"
+
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Downloading application code to temporary place"
+
 cd /app 
 VALIDATE $? "cd into  app directory"
+
+rm -rf /app/*
+VALIDATE $? "removing exisiting code"
+
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "Unzipping..."
+
 cd /app 
 VALIDATE $? "cd into  app directory"
+
 npm install &>>$LOG_FILE
 VALIDATE $? "download the dependencies.."
+
 cp PWD/catalogue.service vim /etc/systemd/system/catalogue.service
 VALIDATE $? "Copying Catalogue service "
+
 systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "Daemon Reload"
+
 systemctl enable catalogue 
 VALIDATE $? "Enabling Catlogue Service"
+
 systemctl start catalogue
 VALIDATE $? "Start Catalogue Service"
+
 cp PWD/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Copying Mongodb to mongo repo"
+
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing Mongodb "
-mongosh --host 172.31.28.91 </app/db/master-data.js
-VALIDATE $? "Connecting to Mongodb..."
-mongosh --host 172.31.28.91
-VALIDATE $? "Connect to mognodb"
-show dbs
-use catalogue
-show collections
-VALIDATE $? "show collections"
+
+INDEX=$(mongosh 172.31.28.91 --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')") 
+if [ $INDEX -le 0 ]; then
+    mongosh --host 172.31.28.91 </app/db/master-data.js &>>$LOG_FILE
+    VALIDATE $? "Load catalogue products"
+else
+    echo -e "Catalogue products already loaded ... $Y SKIPPING $N"
+fi
+
+systemctl restart catalogue
+VALIDATE $? "Restarted catalogue"
+
