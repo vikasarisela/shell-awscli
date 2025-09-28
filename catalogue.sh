@@ -63,7 +63,7 @@ VALIDATE $? "cd into  app directory"
 npm install &>>$LOG_FILE
 VALIDATE $? "download the dependencies.."
 
-cp $PWD/catalogue.service vim /etc/systemd/system/catalogue.service
+cp $PWD/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Copying Catalogue service "
 
 systemctl daemon-reload &>>$LOG_FILE
