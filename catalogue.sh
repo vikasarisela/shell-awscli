@@ -63,7 +63,7 @@ VALIDATE $? "cd into  app directory"
 npm install &>>$LOG_FILE
 VALIDATE $? "download the dependencies.."
 
-cp PWD/catalogue.service vim /etc/systemd/system/catalogue.service
+cp $PWD/catalogue.service vim /etc/systemd/system/catalogue.service
 VALIDATE $? "Copying Catalogue service "
 
 systemctl daemon-reload &>>$LOG_FILE
@@ -75,7 +75,7 @@ VALIDATE $? "Enabling Catlogue Service"
 systemctl start catalogue
 VALIDATE $? "Start Catalogue Service"
 
-cp PWD/mongo.repo /etc/yum.repos.d/mongo.repo
+cp $PWD/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Copying Mongodb to mongo repo"
 
 dnf install mongodb-mongosh -y &>>$LOG_FILE
