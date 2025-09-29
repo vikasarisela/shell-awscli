@@ -100,7 +100,7 @@ G="\e[32m"
 Y="\e[33m"
 N="\e[0m"
 
-LOGS_FOLDER="/var/log/shell-roboshop"
+LOGS_FOLDER="/var/log/shell-script"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 SCRIPT_DIR=$PWD
 MONGODB_HOST=172.31.22.129
